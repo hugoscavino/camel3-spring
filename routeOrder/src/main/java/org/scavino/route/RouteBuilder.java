@@ -12,6 +12,7 @@ import org.scavino.model.Book;
 import org.scavino.service.ValidateService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import processor.MyProcessor;
 
 import javax.ws.rs.core.MediaType;
 
@@ -66,11 +67,10 @@ class RestApi extends RouteBuilder {
                 .to("direct:remoteService");
 
 
-        final String confirmationUrl = "http://localhost:" + bookServicePort + "/confirm?bridgeEndpoint=true&amp;throwExceptionOnFailure=false";
 
         from("direct:remoteService")
                 .description("Calling ValidateService")
-                .routeId("direct-route")
+                .routeId("validation-route")
                 .tracing()
                 .log(">>>id  >>> ${body.id}")
                 .log(">>>name>>> ${body.name}")
@@ -80,6 +80,24 @@ class RestApi extends RouteBuilder {
                         Book bodyIn = (Book) exchange.getIn().getBody();
                         ValidateService.validateBook(bodyIn);
                         exchange.getIn().setBody(bodyIn);
+                    }
+                }).to("direct:confirm");
+
+        JacksonDataFormat jsonDataFormat = new JacksonDataFormat(Book.class);
+        final String confirmationUrl = "http://localhost:" + bookServicePort + "/confirm?bridgeEndpoint=true&amp;throwExceptionOnFailure=false";
+
+        from("direct:confirm")
+                .description("Calling Confirmation HTTP Service")
+                .routeId("confirm-route")
+                .tracing()
+                .log(">>>id  >>> ${body.id}")
+                .log(">>>name>>> ${body.name}")
+                .process(new Processor() {
+                    @Override
+                    public void process(Exchange exchange) throws Exception {
+                        Book confirmBook = (Book) exchange.getIn().getBody();
+                        ValidateService.confirmBook(confirmBook);
+                        exchange.getIn().setBody(confirmBook);
                     }
                 });
     }
