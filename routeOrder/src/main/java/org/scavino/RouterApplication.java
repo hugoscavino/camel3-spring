@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
                                     AopAutoConfiguration.class,
                                     OAuth2ResourceServerAutoConfiguration.class,
                                     EmbeddedWebServerFactoryCustomizerAutoConfiguration.class })
-@ComponentScan(basePackages= "org/scavino/route/")
+@ComponentScan({ "org.scavino.route", "org.scavino.processor"  })
 public class RouterApplication {
 
     public static void main(String[] args) {

@@ -5,20 +5,12 @@ import org.scavino.model.Book;
 public class ValidateService {
 
     public static void validateBook(Book book) {
-        System.out.println("validateBook BEGIN processing : " + book);
+        System.out.println("ValidateService BEGIN : " + book);
 
-        book.setName( "Title: " + book.getName() );
-        book.setId(book.getId() + 10);
+        book.setName( "Validated Title: " + book.getName() );
+        book.setId(book.getId() + 100000);
 
-        System.out.println("validateBook END processing : " + book);
+        System.out.println("ValidateService END : " + book);
     }
 
-    public static void confirmBook(Book book) {
-        System.out.println("confirmBook BEGIN processing : " + book);
-
-        book.setName( "Confirmed Title: " + book.getName() );
-        book.setId(book.getId() + 20);
-
-        System.out.println("confirmBook END processing : " + book);
-    }
 }

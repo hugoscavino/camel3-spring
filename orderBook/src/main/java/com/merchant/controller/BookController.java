@@ -1,12 +1,14 @@
 package com.merchant.controller;
 
 import com.merchant.model.Book;
+import com.merchant.model.OrderConfirmation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,7 +37,7 @@ public class BookController {
      */
     @GetMapping("/order-book")
     @ResponseBody
-    public Book OrderBook(@RequestParam(name = "name")  String name) {
+    public OrderConfirmation OrderBook(@RequestParam(name = "name")  String name) {
         final String url = "http://localhost:" + serverPort + "/camel/api/order-router";
 
         // create headers
@@ -56,7 +58,7 @@ public class BookController {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
 
         // send POST request
-        ResponseEntity<Book> response = this.restTemplate.postForEntity(url, entity, Book.class);
+        ResponseEntity<OrderConfirmation> response = this.restTemplate.postForEntity(url, entity, OrderConfirmation.class);
 
         // check response status code
         if (response.getStatusCode() == HttpStatus.OK) {
@@ -68,9 +70,12 @@ public class BookController {
 
     @PostMapping("/confirm")
     @ResponseBody
-    public Book ConfirmBook(@RequestBody Book book) {
-        System.out.println("Book Confirmed : " + book);
-        return book;
+    public OrderConfirmation ConfirmBook(@RequestBody Book book) {
+        OrderConfirmation orderConfirmation = new OrderConfirmation();
+        orderConfirmation.setOrderId("ORDER-" + book.getId());
+        orderConfirmation.setProductId(book.getId());
+        orderConfirmation.setOrderDate(LocalDate.now());
+        return orderConfirmation;
     }
 
 }

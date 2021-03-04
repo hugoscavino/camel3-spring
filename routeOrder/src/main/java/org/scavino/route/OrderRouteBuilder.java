@@ -4,71 +4,67 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.scavino.model.Book;
+import org.scavino.model.OrderConfirmation;
+import org.scavino.processor.OrderConfirmationProcessor;
 import org.scavino.service.ValidateService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import processor.MyProcessor;
 
 import javax.ws.rs.core.MediaType;
 
 @Component
-class RestApi extends RouteBuilder {
+class OrderRouteBuilder extends RouteBuilder {
 
-    @Value("${server.port}")
-    String serverPort;
 
-    @Value("${book-service.port}")
-    String bookServicePort;
+    private final String serverPort;
+    private final String bookServicePort;
+    private final OrderConfirmationProcessor orderConfirmationProcessor;
 
+    public OrderRouteBuilder(@Value("${server.port}") String serverPort,
+                             @Value("${book-service.port}") String bookServicePort,
+                             OrderConfirmationProcessor orderConfirmationProcessor){
+        this.serverPort = serverPort;
+        this.bookServicePort = bookServicePort;
+        this.orderConfirmationProcessor = orderConfirmationProcessor;
+    }
 
     @Override
     public void configure() {
 
         CamelContext context = new DefaultCamelContext();
+        context.setStreamCaching(false);
 
         // http://localhost:8080/camel/api-doc
         restConfiguration()
                 .port(serverPort)
                 .enableCORS(true)
                 .apiContextPath("/api-doc")
-                .apiProperty("api.title", "Sample REST API")
-                .apiProperty("api.version", "v1")
+                .apiProperty("api.title", "BOOK ROUTER REST API")
+                .apiProperty("api.version", "v1.0")
                 .apiProperty("cors", "true") // cross-site
                 .apiContextRouteId("doc-api")
                 .component("servlet")
                 .bindingMode(RestBindingMode.json)
                 .dataFormatProperty("prettyPrint", "true");
 
-        /*
-         The Rest DSL supports automatic binding json/xml contents to/from
-         POJOs using Camels Data Format.
-
-         By default the binding mode is off, meaning there is no automatic
-         binding happening for incoming and outgoing messages.
-
-         You may want to use binding if you develop POJOs that maps to
-         your REST services request and response types.
-         */
-
+        // REST INJESTER
         rest("/api/")
-                .description("Sample REST Service")
+                .description("Book Ordering REST Service")
                 .id("api-route")
+                .enableCORS(true)
+                .bindingMode(RestBindingMode.json)
                 .post("/order-router")
                 .produces(MediaType.APPLICATION_JSON)
                 .consumes(MediaType.APPLICATION_JSON)
-                .bindingMode(RestBindingMode.json)
                 .type(Book.class)
-                .enableCORS(true)
-                .to("direct:remoteService");
+                .outType(OrderConfirmation.class)
+                .to("direct:validateService");
 
-
-
-        from("direct:remoteService")
+        // VALIDATION SERVICE
+        from("direct:validateService")
                 .description("Calling ValidateService")
                 .routeId("validation-route")
                 .tracing()
@@ -81,24 +77,22 @@ class RestApi extends RouteBuilder {
                         ValidateService.validateBook(bodyIn);
                         exchange.getIn().setBody(bodyIn);
                     }
-                }).to("direct:confirm");
+                })
+                .to("direct:confirm");
 
-        JacksonDataFormat jsonDataFormat = new JacksonDataFormat(Book.class);
-        final String confirmationUrl = "http://localhost:" + bookServicePort + "/confirm?bridgeEndpoint=true&amp;throwExceptionOnFailure=false";
+        final String externalHttp = "http://localhost:" + bookServicePort + "/confirm?bridgeEndpoint=true&amp;throwExceptionOnFailure=false";
 
+        // CONFIRMATION HTTP SERVICE
         from("direct:confirm")
                 .description("Calling Confirmation HTTP Service")
                 .routeId("confirm-route")
                 .tracing()
-                .log(">>>id  >>> ${body.id}")
-                .log(">>>name>>> ${body.name}")
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        Book confirmBook = (Book) exchange.getIn().getBody();
-                        ValidateService.confirmBook(confirmBook);
-                        exchange.getIn().setBody(confirmBook);
-                    }
-                });
+                .log(">>>Confirm Book  >>> ${body}")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to(externalHttp)
+                .process(orderConfirmationProcessor)
+                .log(">>>Confirm OrderConfirmation  >>> ${body}")
+                ;
     }
 }
