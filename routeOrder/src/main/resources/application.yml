@@ -2,7 +2,19 @@ server:
   port: 8080
 
 book-service:
+  server: localhost
   port: 8081
+  context-root: /order-book
+
+translate-service:
+  server: localhost
+  port: 8082
+  context-root: /translate
+
+fulfillment-service:
+  server: localhost
+  port: 8083
+  context-root: /print
 
 camel:
   springboot:

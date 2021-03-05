@@ -32,12 +32,12 @@ public class BookController {
      * with header parameters: Content-Type: application/json,
      * and a payload {“id”: 1,”name”: “World”}
      *
-     * @param name for the MyBean
-     * @return MyBean
+     * @param title for Book
+     * @return OrderConfirmation
      */
     @GetMapping("/order-book")
     @ResponseBody
-    public OrderConfirmation OrderBook(@RequestParam(name = "name")  String name) {
+    public OrderConfirmation OrderBook(@RequestParam(name = "title")  String title) {
         final String url = "http://localhost:" + serverPort + "/camel/api/order-router";
 
         // create headers
@@ -52,7 +52,7 @@ public class BookController {
         // create a map for post parameters
         Map<String, Object> map = new HashMap<>();
         map.put("id", LocalTime.now().toSecondOfDay());
-        map.put("name", name);
+        map.put("title", title);
 
         // build the request
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);

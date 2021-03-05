@@ -1,0 +1,8 @@
+server:
+  port: 8082
+
+# disable all management end points except health
+endpoints:
+  enabled: false
+  health:
+    enabled: true

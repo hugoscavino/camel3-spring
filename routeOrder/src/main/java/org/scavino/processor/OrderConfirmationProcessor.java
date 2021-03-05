@@ -5,6 +5,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.support.MessageHelper;
+import org.scavino.model.Book;
 import org.scavino.model.OrderConfirmation;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,8 @@ public class OrderConfirmationProcessor implements Processor  {
         Message message = exchange.getIn();
         String json = MessageHelper.extractBodyAsString(message);
         OrderConfirmation orderConfirmation = objectMapper.readValue(json, OrderConfirmation.class );
+        Book book = (Book)exchange.getProperty("BOOK_ID");
+        orderConfirmation.setBook(book);
         message.setBody(orderConfirmation);
     }
 }

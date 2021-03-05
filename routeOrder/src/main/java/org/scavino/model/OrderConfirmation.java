@@ -5,6 +5,7 @@ import java.util.StringJoiner;
 
 public class OrderConfirmation {
 
+    private Book book;
     private String orderId;
     private Integer productId;
     private LocalDate orderDate;
@@ -33,10 +34,18 @@ public class OrderConfirmation {
         this.orderDate = orderDate;
     }
 
+    public Book getBook() {
+        return book;
+    }
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", OrderConfirmation.class.getSimpleName() + "[", "]")
-                .add("orderId=" + orderId)
+                .add("book=" + book)
+                .add("orderId='" + orderId + "'")
                 .add("productId=" + productId)
                 .add("orderDate=" + orderDate)
                 .toString();

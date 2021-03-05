@@ -1,0 +1,15 @@
+server:
+  port: 8083
+
+# Binding health checks to a different port
+management:
+  port: 8081
+
+camel-router:
+  port: 8080
+
+# disable all management end points except health
+endpoints:
+  enabled: false
+  health:
+    enabled: true

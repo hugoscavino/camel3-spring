@@ -10,6 +10,9 @@
     <modules>
         <module>orderBook</module>
         <module>routeOrder</module>
+        <module>TranslateBook</module>
+        <module>BookFullfillment</module>
+        <module>fullfill</module>
     </modules>
 
     <properties>
