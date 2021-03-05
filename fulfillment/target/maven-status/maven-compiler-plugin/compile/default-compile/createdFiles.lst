@@ -1,0 +1,9 @@
+com\factory\entity\EntityUtils.class
+com\factory\controller\FactoryErrorController.class
+com\factory\controller\IndexController.class
+FulfillmentApplication.class
+com\factory\repository\BookRepository.class
+com\factory\controller\PrintBookController.class
+com\factory\model\OrderConfirmation.class
+com\factory\entity\BookEntity.class
+com\factory\model\Book.class

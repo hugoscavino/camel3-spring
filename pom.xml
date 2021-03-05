@@ -11,8 +11,7 @@
         <module>orderBook</module>
         <module>routeOrder</module>
         <module>TranslateBook</module>
-        <module>BookFullfillment</module>
-        <module>fullfill</module>
+        <module>fulfillment</module>
     </modules>
 
     <properties>

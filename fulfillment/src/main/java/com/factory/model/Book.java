@@ -5,16 +5,26 @@ import java.util.StringJoiner;
 
 public class Book {
 
-    private Integer id;
+    private Long id;
     private String title;
     private String translatedTitle;
     private String isbn;
     private BigDecimal price;
 
-    public Integer getId() {
+    public Book(){}
+
+    public Book(Long id, String title, String translatedTitle, String isbn, BigDecimal price) {
+        this.id = id;
+        this.title = title;
+        this.translatedTitle = translatedTitle;
+        this.isbn = isbn;
+        this.price = price;
+    }
+
+    public Long getId() {
         return id;
     }
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getTitle() {

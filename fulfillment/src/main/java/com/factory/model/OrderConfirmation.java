@@ -6,7 +6,7 @@ import java.util.StringJoiner;
 public class OrderConfirmation {
 
     private String orderId;
-    private Integer productId;
+    private Long productId;
     private LocalDate orderDate;
     private Book book;
 
@@ -18,11 +18,11 @@ public class OrderConfirmation {
         this.orderId = orderId;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
