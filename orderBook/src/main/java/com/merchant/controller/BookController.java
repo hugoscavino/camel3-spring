@@ -1,25 +1,25 @@
 package com.merchant.controller;
 
-import com.merchant.model.Book;
 import com.merchant.model.OrderConfirmation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 public class BookController {
 
     @Value("${camel-router.port}")
     private String serverPort;
-
 
     private final RestTemplate restTemplate;
 
@@ -28,25 +28,20 @@ public class BookController {
     }
 
     /**
-     * Do a POST request to http://localhost:8080/camel/api/bean
+     * Do a POST request to http://localhost:8080/api/routers/book-router
      * with header parameters: Content-Type: application/json,
-     * and a payload {“id”: 1,”name”: “World”}
+     * and a payload {“id”: 1,”title”: “World”}
      *
      * @param title for Book
      * @return OrderConfirmation
      */
     @GetMapping("/order-book")
-    @ResponseBody
-    public OrderConfirmation OrderBook(@RequestParam(name = "title")  String title) {
+    public String OrderBook(@RequestParam(name = "title")  String title, Model model) {
         final String url = "http://localhost:" + serverPort + "/api/router/book-router";
 
         // create headers
         HttpHeaders headers = new HttpHeaders();
-
-        // set `content-type` header
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         // create a map for post parameters
@@ -59,25 +54,15 @@ public class BookController {
 
         // send POST request
         ResponseEntity<OrderConfirmation> response = this.restTemplate.postForEntity(url, entity, OrderConfirmation.class);
-        //ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
 
         // check response status code
         if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody();
-            //return null;
+            model.addAttribute("order", response.getBody());
+            return "confirmation";
         } else {
-            return null;
+            return "500";
         }
     }
 
-    @PostMapping("/confirm")
-    @ResponseBody
-    public OrderConfirmation ConfirmBook(@RequestBody Book book) {
-        OrderConfirmation orderConfirmation = new OrderConfirmation();
-        orderConfirmation.setOrderId("ORDER-" + book.getId());
-        orderConfirmation.setProductId(book.getId());
-        orderConfirmation.setOrderDate(LocalDate.now());
-        return orderConfirmation;
-    }
 
 }

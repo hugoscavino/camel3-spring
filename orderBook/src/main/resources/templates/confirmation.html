@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order a Book</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Your Book Order Has Been Processed</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered" width="100%" id="order-dataTable" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>orderId</th>
+                    <th>productId</th>
+                    <th>orderDate</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${order.orderId}"></td>
+                    <td th:text="${order.productId}"></td>
+                    <td th:text="${order.orderDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered" width="100%" id="book-dataTable" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>isbn</th>
+                    <th>title</th>
+                    <th>translatedTitle</th>
+                    <th>price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${order.book.isbn}"></td>
+                    <td th:text="${order.book.title}"></td>
+                    <td th:text="${order.book.translatedTitle}"></td>
+                    <td th:text="${order.book.price}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

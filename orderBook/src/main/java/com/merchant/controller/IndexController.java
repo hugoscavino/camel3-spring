@@ -1,5 +1,6 @@
 package com.merchant.controller;
 
+import com.merchant.model.Book;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model) {
 
-        // add `message` attribute
+        model.addAttribute("book", new Book());
         model.addAttribute("message", "Thank you for visiting.");
 
         // return view name

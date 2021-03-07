@@ -16,9 +16,13 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <p>
-                <th:block th:text="${message}">message</th:block>
-            </p>
+            <form action="#" th:action="@{/order-book}" th:object="${book}" method="get">
+                <p>Title: <input type="text" th:field="*{title}" /></p>
+                <p>
+                    <input type="submit" value="Submit" />
+                    <input type="reset" value="Reset" />
+                </p>
+            </form>
         </div>
     </div>
 </div>
