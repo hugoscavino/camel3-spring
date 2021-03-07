@@ -4,17 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
-import org.apache.camel.support.MessageHelper;
 import org.scavino.model.Book;
 import org.scavino.model.OrderConfirmation;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderConfirmationProcessor implements Processor  {
+public class PrintBookProcessor implements Processor  {
 
     private final ObjectMapper objectMapper;
 
-    public OrderConfirmationProcessor(ObjectMapper objectMapper){
+    public PrintBookProcessor(ObjectMapper objectMapper){
         this.objectMapper = objectMapper;
     }
 
@@ -25,8 +24,9 @@ public class OrderConfirmationProcessor implements Processor  {
      */
     public void process(Exchange exchange) throws Exception {
         Message message = exchange.getIn();
-        String json = MessageHelper.extractBodyAsString(message);
-        OrderConfirmation orderConfirmation = objectMapper.readValue(json, OrderConfirmation.class );
+        //String json = MessageHelper.extractBodyAsString(message);
+        OrderConfirmation orderConfirmation = exchange.getIn().getBody(OrderConfirmation.class);
+        //OrderConfirmation orderConfirmation = objectMapper.readValue(json, OrderConfirmation.class );
         Book book = (Book)exchange.getProperty("BOOK_ID");
         orderConfirmation.setBook(book);
         message.setBody(orderConfirmation);

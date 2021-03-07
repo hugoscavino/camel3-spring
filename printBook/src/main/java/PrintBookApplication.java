@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages="com.factory")
 @EnableJpaRepositories(basePackages = "com.factory.*")
 @EntityScan("com.factory.*")
-public class FulfillmentApplication {
+public class PrintBookApplication {
     public static void main(String[] args) {
-        SpringApplication.run(FulfillmentApplication.class, args);
+        SpringApplication.run(PrintBookApplication.class, args);
     }
 
 }

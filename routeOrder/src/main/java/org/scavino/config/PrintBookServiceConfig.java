@@ -4,8 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "fulfillment-service")
-public class FulfillmentServiceConfig {
+@ConfigurationProperties(prefix = "print-book-service")
+public class PrintBookServiceConfig {
     private String server;
     private String port;
     private String contextRoot;

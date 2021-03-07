@@ -10,8 +10,9 @@
     <modules>
         <module>orderBook</module>
         <module>routeOrder</module>
-        <module>TranslateBook</module>
-        <module>fulfillment</module>
+        <module>translateBook</module>
+        <module>printBook</module>
+        <module>SwaggerCamelRoute</module>
     </modules>
 
     <properties>

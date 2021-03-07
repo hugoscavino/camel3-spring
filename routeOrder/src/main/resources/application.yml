@@ -1,6 +1,3 @@
-server:
-  port: 8080
-
 book-service:
   server: localhost
   port: 8081
@@ -11,30 +8,7 @@ translate-service:
   port: 8082
   context-root: /translate
 
-fulfillment-service:
+print-book-service:
   server: localhost
   port: 8083
   context-root: /print
-
-camel:
-  springboot:
-    # The Camel context name
-    name: ServicesRest
-
-# Binding health checks to a different port
-management:
-  port: 8081
-
-# disable all management end points except health
-endpoints:
-  enabled: false
-  health:
-    enabled: true
-
-# The application configuration properties
-quickstart:
-  generateOrderPeriod: 10s
-
-spring:
-  main:
-    allow-bean-definition-overriding: true

@@ -38,7 +38,7 @@ public class BookController {
     @GetMapping("/order-book")
     @ResponseBody
     public OrderConfirmation OrderBook(@RequestParam(name = "title")  String title) {
-        final String url = "http://localhost:" + serverPort + "/camel/api/order-router";
+        final String url = "http://localhost:" + serverPort + "/api/router/book-router";
 
         // create headers
         HttpHeaders headers = new HttpHeaders();
@@ -59,10 +59,12 @@ public class BookController {
 
         // send POST request
         ResponseEntity<OrderConfirmation> response = this.restTemplate.postForEntity(url, entity, OrderConfirmation.class);
+        //ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
 
         // check response status code
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
+            //return null;
         } else {
             return null;
         }

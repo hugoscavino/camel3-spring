@@ -3,6 +3,7 @@ package org.scavino.converters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Converter;
+import org.apache.camel.TypeConverters;
 import org.scavino.model.Book;
 import org.scavino.model.OrderConfirmation;
 import org.springframework.stereotype.Component;
@@ -12,11 +13,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Component
-@Converter(generateLoader = true)
-public class BookConverter {
+@Converter
+public class BookTypeConverter implements TypeConverters {
+
     private final ObjectMapper mapper;
 
-    public BookConverter(ObjectMapper mapper) {
+    public BookTypeConverter(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
