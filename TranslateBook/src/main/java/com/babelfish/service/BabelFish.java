@@ -11,6 +11,9 @@ public class BabelFish {
     final public Locale spanish = new Locale("es", "ES");
 
     public String translateBookTitle(String title, Locale locale){
+
+        // TODO Do something interesting here, like go to an actual translation API AWS, Microsoft, google
+
         String tranlated_title = title;
             if (locale.getLanguage().equalsIgnoreCase(english.getLanguage())){
                 tranlated_title = "A " + title;

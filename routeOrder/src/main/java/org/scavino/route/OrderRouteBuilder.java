@@ -3,7 +3,6 @@ package org.scavino.route;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.scavino.config.BookServiceConfig;
 import org.scavino.config.PrintBookServiceConfig;
@@ -62,9 +61,6 @@ class OrderRouteBuilder extends RouteBuilder {
     public void configure() {
 
         camelContext.setStreamCaching(false);
-        //context.getGlobalOptions().put("CamelJacksonEnableTypeConverter", "true");
-        //context.getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
-
         camelContext.getTypeConverterRegistry().addTypeConverters(bookTypeConverter);
 
         // http://localhost:8080/api/api-doc
@@ -78,8 +74,8 @@ class OrderRouteBuilder extends RouteBuilder {
                 .component("servlet")
                 .bindingMode(RestBindingMode.json)
                 .dataFormatProperty("prettyPrint", "true");
-        // REST INGESTOR
 
+        // REST INGESTOR
         rest("/router/")
                 .description("Book Ordering REST Service")
                 .id("api-route")
@@ -149,9 +145,9 @@ class OrderRouteBuilder extends RouteBuilder {
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .to(printBookServiceConfigUrl)
-                .unmarshal().json(JsonLibrary.Jackson, OrderConfirmation.class)
                 .process(printBookProcessor)
                 .process(printBodyAsStringProcessor)
+                .outputType(OrderConfirmation.class)
                 .log(">>>OrderConfirmation  >>> ${body}")
                 ;
     }

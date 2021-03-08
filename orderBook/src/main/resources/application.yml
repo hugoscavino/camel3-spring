@@ -15,3 +15,8 @@ endpoints:
   enabled: false
   health:
     enabled: true
+
+spring:
+  h2:
+    console:
+      enabled: true

@@ -17,16 +17,9 @@ public class PrintBookProcessor implements Processor  {
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * Extract the message body as a JSON String and then convert to object
-     * @param exchange setup as a InputStream
-     * @throws Exception
-     */
     public void process(Exchange exchange) throws Exception {
         Message message = exchange.getIn();
-        //String json = MessageHelper.extractBodyAsString(message);
         OrderConfirmation orderConfirmation = exchange.getIn().getBody(OrderConfirmation.class);
-        //OrderConfirmation orderConfirmation = objectMapper.readValue(json, OrderConfirmation.class );
         Book book = (Book)exchange.getProperty("BOOK_ID");
         orderConfirmation.setBook(book);
         message.setBody(orderConfirmation);

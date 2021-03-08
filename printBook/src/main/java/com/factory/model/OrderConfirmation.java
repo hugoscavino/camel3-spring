@@ -2,7 +2,9 @@ package com.factory.model;
 
 import java.time.LocalDate;
 import java.util.StringJoiner;
-
+/**
+ * com.factory version of the OrderConfirmation PoJo
+ */
 public class OrderConfirmation {
 
     private String orderId;
@@ -32,8 +34,9 @@ public class OrderConfirmation {
     @Override
     public String toString() {
         return new StringJoiner(", ", OrderConfirmation.class.getSimpleName() + "[", "]")
-                .add("orderId=" + orderId)
+                .add("orderId='" + orderId + "'")
                 .add("orderDate=" + orderDate)
+                .add("book=" + book)
                 .toString();
     }
 }

@@ -3,6 +3,9 @@ package com.factory.model;
 import java.math.BigDecimal;
 import java.util.StringJoiner;
 
+/**
+ * com.factory version of the Book PoJo
+ */
 public class Book {
 
     private Long id;
