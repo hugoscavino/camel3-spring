@@ -28,7 +28,6 @@ public class PrintBookController {
         OrderConfirmation orderConfirmation = new OrderConfirmation();
         orderConfirmation.setBook(book);
         orderConfirmation.setOrderId("ORDER-" + book.getId());
-        orderConfirmation.setProductId(book.getId());
         orderConfirmation.setOrderDate(LocalDate.now());
 
         final BookEntity bookEntity = EntityUtils.toEntityDto(orderConfirmation.getBook());

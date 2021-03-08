@@ -12,7 +12,6 @@
         <module>routeOrder</module>
         <module>translateBook</module>
         <module>printBook</module>
-        <module>SwaggerCamelRoute</module>
     </modules>
 
     <properties>

@@ -1,7 +1,10 @@
 package com.merchant.controller;
 
+import com.merchant.config.RouteServiceConfig;
+import com.merchant.entity.OrderConfirmationEntity;
+import com.merchant.model.DtoUtil;
 import com.merchant.model.OrderConfirmation;
-import org.springframework.beans.factory.annotation.Value;
+import com.merchant.repository.OrderRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -18,12 +21,17 @@ import java.util.Map;
 @Controller
 public class BookController {
 
-    @Value("${camel-router.port}")
-    private String serverPort;
+
+    private final RouteServiceConfig routeServiceConfig;
+    private final OrderRepository orderRepository;
 
     private final RestTemplate restTemplate;
 
-    public BookController(RestTemplateBuilder restTemplateBuilder) {
+    public BookController(RouteServiceConfig routeServiceConfig,
+                          OrderRepository orderRepository,
+                          RestTemplateBuilder restTemplateBuilder) {
+        this.routeServiceConfig = routeServiceConfig;
+        this.orderRepository = orderRepository;
         this.restTemplate = restTemplateBuilder.build();
     }
 
@@ -37,7 +45,11 @@ public class BookController {
      */
     @GetMapping("/order-book")
     public String OrderBook(@RequestParam(name = "title")  String title, Model model) {
-        final String url = "http://localhost:" + serverPort + "/api/router/book-router";
+
+        final String url = "http://"
+                            + routeServiceConfig.getServer() + ":"
+                            + routeServiceConfig.getPort()
+                            + routeServiceConfig.getContextRoot();
 
         // create headers
         HttpHeaders headers = new HttpHeaders();
@@ -51,13 +63,22 @@ public class BookController {
 
         // build the request
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
-
         // send POST request
         ResponseEntity<OrderConfirmation> response = this.restTemplate.postForEntity(url, entity, OrderConfirmation.class);
 
+        // Add This Oder Confirmation to Model
+        final OrderConfirmation orderConfirmation = response.getBody();
+        if (orderConfirmation != null){
+            orderRepository.save(DtoUtil.toOrderConfirmationEntity(orderConfirmation));
+        }
+
+        // Get All from database and add to model
+        final Iterable<OrderConfirmationEntity> orderConfirmationEntities = orderRepository.findAll();
+
         // check response status code
         if (response.getStatusCode() == HttpStatus.OK) {
-            model.addAttribute("order", response.getBody());
+            model.addAttribute("order", orderConfirmation);
+            model.addAttribute("orderConfirmations", orderConfirmationEntities);
             return "confirmation";
         } else {
             return "500";

@@ -3,10 +3,14 @@ package com.merchant.model;
 import java.time.LocalDate;
 import java.util.StringJoiner;
 
+/**
+ * Add your one book to the order. This is a 1:1 relationship for this demo
+ */
 public class OrderConfirmation {
+
     private Book book;
+
     private String orderId;
-    private Integer productId;
     private LocalDate orderDate;
 
     public String getOrderId() {
@@ -15,14 +19,6 @@ public class OrderConfirmation {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
     }
 
     public LocalDate getOrderDate() {
@@ -46,7 +42,6 @@ public class OrderConfirmation {
         return new StringJoiner(", ", OrderConfirmation.class.getSimpleName() + "[", "]")
                 .add("book=" + book)
                 .add("orderId='" + orderId + "'")
-                .add("productId=" + productId)
                 .add("orderDate=" + orderDate)
                 .toString();
     }

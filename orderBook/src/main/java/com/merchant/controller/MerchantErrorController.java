@@ -24,11 +24,9 @@ public class MerchantErrorController implements ErrorController {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         Object errorMsg = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
         Object errorException = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
-        // TODO: log error details here
 
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
-
 
             // display specific error page
             if (statusCode == HttpStatus.NOT_FOUND.value()) {

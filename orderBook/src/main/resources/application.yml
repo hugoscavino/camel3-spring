@@ -5,8 +5,10 @@ server:
 management:
   port: 8081
 
-camel-router:
+route-service:
+  server: localhost
   port: 8080
+  context-root: /api/router/book-router
 
 # disable all management end points except health
 endpoints:

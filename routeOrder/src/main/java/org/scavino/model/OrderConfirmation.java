@@ -7,7 +7,6 @@ public class OrderConfirmation {
 
     private Book book;
     private String orderId;
-    private Integer productId;
     private LocalDate orderDate;
 
     public String getOrderId() {
@@ -18,13 +17,6 @@ public class OrderConfirmation {
         this.orderId = orderId;
     }
 
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
 
     public LocalDate getOrderDate() {
         return orderDate;
@@ -46,7 +38,6 @@ public class OrderConfirmation {
         return new StringJoiner(", ", OrderConfirmation.class.getSimpleName() + "[", "]")
                 .add("book=" + book)
                 .add("orderId='" + orderId + "'")
-                .add("productId=" + productId)
                 .add("orderDate=" + orderDate)
                 .toString();
     }

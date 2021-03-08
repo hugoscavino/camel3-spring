@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Order a Book</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -20,14 +19,12 @@
                 <thead>
                 <tr>
                     <th>orderId</th>
-                    <th>productId</th>
                     <th>orderDate</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td th:text="${order.orderId}"></td>
-                    <td th:text="${order.productId}"></td>
                     <td th:text="${order.orderDate}"></td>
                 </tr>
                 </tbody>
@@ -52,6 +49,42 @@
             </table>
         </div>
     </div>
+
+    <div class="row">
+        <h2>Book Orders in Progress</h2>
+        <div class="col-md-12">
+            <table class="table table-bordered" width="100%" id="all-books-dataTable" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Order Date</th>
+                    <th>Book ISBN</th>
+                    <th>Book Title</th>
+                    <th>Book Translated Title</th>
+                    <th>Book Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orderConfirmations}">
+                    <td th:text="${order.orderId}"></td>
+                    <td th:text="${order.orderDate}"></td>
+                    <td th:text="${order.book.isbn}"></td>
+                    <td th:text="${order.book.title}"></td>
+                    <td th:text="${order.book.translatedTitle}"></td>
+                    <td th:text="${order.book.price}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <button onclick="location.href='/'" type="button">Home</button>
+        </div>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 </body>
 </html>

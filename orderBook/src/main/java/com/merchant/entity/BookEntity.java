@@ -1,13 +1,16 @@
-package com.merchant.model;
+package com.merchant.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.StringJoiner;
 
-/**
- * Simple Book Pojo add more attributes as required
- */
-public class Book {
+@Entity
+public class BookEntity {
 
+    @Id
+    @Column(name = "id")
     private Long id;
     private String title;
     private String translatedTitle;
@@ -17,12 +20,15 @@ public class Book {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -53,7 +59,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", BookEntity.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("title='" + title + "'")
                 .add("translatedTitle='" + translatedTitle + "'")
