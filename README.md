@@ -1,24 +1,37 @@
 # camel3-spring example project
 ## About / Synopsis
 
-* This was my way to learn about Spring Boot 2.x and Camel 3.x. I created an ultra simple
-  front-end so a fake user can enter a book title and then in have camel routes process the
-  order calling separate HTTP services along the way
-* Project status: working/sample
-* No Support
+I really enjoy learning by example, and I could not find a solid example using Camel 3.x and
+Spring Boot 2.x invoking external REST services. I wanted to exercise some general principles 
+and gain a better understanding of service orchestration. Basically how can I coordinate 
+separate services over REST? Seems like Apache's Camel would be a good tool to learn more
+about.
 
-I reviewed these guides to help along the way, the problem with these were 
-still on version 2 or not using Spring Boot 2.x. I wanted to find a tutorial
-using version 3.8 (the latest as of March 7) and Spring Boot 2.3.4 (again the
-latest on March 7, 2021). Ultimately, I combined many of the below concepts with 
-the camel example code which had a working pom.xml and spring boot integration:
+https://github.com/hugoscavino/camel3-spring
+
+Please feel free to fork, invoke pull requests or ask questions. I am a complete novice, but
+thought I would share what I learned so far.
+
+  Specifically.
+  * Translate the book to Spanish (not really, but you get the point)
+  * Validate the book ( Add a price, and then assign an ISBN number)
+  * Send the book to the printer ( save to a database)
+  
+#### Project status: working/sample
+#### Support: None
+
+I reviewed these guides to help along the way, the problem with these were still on version 2 
+or not using Spring Boot 2.x. I wanted to find a tutorial using version 3.8 (the latest as 
+of March 7) and Spring Boot 2.3.4 (again the latest on March 7, 2021). Ultimately, I combined 
+many of the below concepts with the camel example code which had a working pom.xml and 
+Spring Boot integration:
 
 * <https://github.com/apache/camel-spring-boot-examples/tree/master/spring-boot/src/main/java/sample/camel>
 * <https://www.baeldung.com/spring-apache-camel-tutorial>
 * <https://camel.apache.org/manual/latest/walk-through-an-example.html>
 * <https://www.javainuse.com/spring/bootcamel>
 
-## Book Odering Service and UI
+## Book Order Service and UI
 This is the fake UI that starts the Camel router. It posts a Book.class with just a
 title. The rest of the process will create the Order Confirmation and update the remaining
 attributes.
@@ -84,15 +97,15 @@ in order to use the 3.8 version and SpringBoot 2.x.x
 
 ### TypeConverters:
 I am still not sure why I had to implement and configure my own TypeConverter to convert
-the ${body} from InputStream into a viable object. Need to perhaps use the marashl() or
-unmarshall() jacskson methods.
+the ${body} from InputStream into a viable object. Need to perhaps use the marshall() or
+unmarshall() jacskson methods?
 
 #### TypeConverters
     
     org.scavino.converters.BookTypeConverter
 
 In the early 3.x version of Camel I was able to install these using the META-INF solution. 
-This stopped working in version 3.7/3.8 and I instead had to get an instance of the Camel
+This stopped working in version 3.7/3.8, and I instead had to get an instance of the Camel
 Context and add the BookTypeConverter.class to the registry
 
 Worked before 3.7 and had to switch to using the CamelContext
@@ -111,14 +124,13 @@ New TypeConverter registration process in Camel 3.8+
     camelContext.getTypeConverterRegistry().addTypeConverters(bookTypeConverter);
 
 
-From the console out in start up. Once I saw this in the console I new my TypeConverter 
-was going to work. 
+Below is a printout from the console out during start up. When I saw these lines in the 
+console I knew my TypeConverter was going to work. 
 
     WARN  o.a.c.i.c.CoreTypeConverterRegistry - Overriding type converter from: InstanceMethodTypeConverter: public java.io.InputStream org.scavino.converters.BookTypeConverter.orderConfirmationToInputStream(org.scavino.model.OrderConfirmation) to: InstanceMethodTypeConverter: public java.io.InputStream org.scavino.converters.BookTypeConverter.orderConfirmationToInputStream(org.scavino.model.OrderConfirmation)
     WARN  o.a.c.i.c.CoreTypeConverterRegistry - Overriding type converter from: InstanceMethodTypeConverter: public org.scavino.model.OrderConfirmation org.scavino.converters.BookTypeConverter.inputStreamToOrderConfirmation(java.io.InputStream) to: InstanceMethodTypeConverter: public org.scavino.model.OrderConfirmation org.scavino.converters.BookTypeConverter.inputStreamToOrderConfirmation(java.io.InputStream)
     WARN  o.a.c.i.c.CoreTypeConverterRegistry - Overriding type converter from: InstanceMethodTypeConverter: public org.scavino.model.Book org.scavino.converters.BookTypeConverter.inputStreamToBook(java.io.InputStream) to: InstanceMethodTypeConverter: public org.scavino.model.Book org.scavino.converters.BookTypeConverter.inputStreamToBook(java.io.InputStream)
     WARN  o.a.c.i.c.CoreTypeConverterRegistry - Overriding type converter from: InstanceMethodTypeConverter: public java.io.InputStream org.scavino.converters.BookTypeConverter.bookToInputStream(org.scavino.model.Book) to: InstanceMethodTypeConverter: public java.io.InputStream org.scavino.converters.BookTypeConverter.bookToInputStream(org.scavino.model.Book)
-22:0
 
 ### Processors
 #### PrintBodyAsStringProcessor
@@ -172,7 +184,7 @@ got tired of creating Spring Boot applications and running instances.
     
 #### undertow instead of tomcat
 The sample program I copied used undertow instead of tomcat in the Spring Boot pom.xml. I 
-did not want to fight the example from Camel so I just kept it. Which meant my 
+did not want to fight the example from Camel, so I just kept it. This meant my 
 SpringApplication class did not need the extra tomcat Servlet configuration.
     
 From console
@@ -370,5 +382,5 @@ may be too coupled in real life but for this example works for me.
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 ## About Hugo Scavino
-I am a full stack developer and I like to teach myself these technologies in order
+I am a full stack developer. I like to teach myself these technologies in order
 to jump start my teams.
